@@ -3,7 +3,7 @@ make clean
 make CFLAGS=-fPIC
 cd ..
 mkdir -p build_linux64_lj && cd build_linux64_lj
-cmake -DPBC=ON -DUSING_LUAJIT=ON ../
+cmake -DUSING_LUAJIT=ON ../
 cd ..
 cmake --build build_linux64_lj --config Release
 

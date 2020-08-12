@@ -13,7 +13,7 @@ local tinsert = table.insert
 local rawget = rawget
 local rawset = rawset
 
-module("protobuf", package.seeall)
+module "protobuf"
 
 local _pattern_cache = {}
 
@@ -178,7 +178,7 @@ end
 _reader[1] = function(msg) return _reader.int end
 _reader[2] = function(msg) return _reader.real end
 _reader[3] = function(msg) return _reader.bool end
-_reader[4] = function(msg) return _reader.int end
+_reader[4] = function(msg) return _reader.string end
 _reader[5] = function(msg) return _reader.string end
 _reader[6] = function(msg)
 	local message = _reader.message
@@ -195,7 +195,7 @@ _reader[11] = function(msg) return _reader.uint52 end
 _reader[128+1] = function(msg) return _reader.int_repeated end
 _reader[128+2] = function(msg) return _reader.real_repeated end
 _reader[128+3] = function(msg) return _reader.bool_repeated end
-_reader[128+4] = function(msg) return _reader.int_repeated end
+_reader[128+4] = function(msg) return _reader.string_repeated end
 _reader[128+5] = function(msg) return _reader.string_repeated end
 _reader[128+6] = function(msg)
 	local message = _reader.message_repeated
@@ -212,28 +212,11 @@ _reader[128+11] = function(msg) return _reader.uint52_repeated end
 local _decode_type_meta = {}
 
 function _decode_type_meta:__index(key)
-		local t, msg = c._env_type(P, self._CType, key)
-    --local func = assert(_reader[t], key)(msg)
-    local reader = _reader[t]
-    local func
-    if reader then
-        func = reader(msg)
-    else
-        print("!!!!!!!!!!!!!!!!尝试访问不存在的proto字段"..self._CType.."."..key.."\n"..debug.traceback())
-        func = function() end
-    end
-    self[key] = func
-    return func
-end
-
---[[
-function _decode_type_meta:__index(key)
 	local t, msg = c._env_type(P, self._CType, key)
 	local func = assert(_reader[t],key)(msg)
 	self[key] = func
 	return func
 end
-]]
 
 setmetatable(decode_type_cache , {
 	__index = function(self, key)
@@ -270,7 +253,7 @@ end
 local _writer = {
 	int = c._wmessage_integer,
 	real = c._wmessage_real,
-	enum = c._wmessage_integer,
+	enum = c._wmessage_string,
 	string = c._wmessage_string,
 	int64 = c._wmessage_int64,
 	int32 = c._wmessage_int32,
@@ -345,7 +328,7 @@ end
 _writer[1] = function(msg) return _writer.int end
 _writer[2] = function(msg) return _writer.real end
 _writer[3] = function(msg) return _writer.bool end
-_writer[4] = function(msg) return _writer.int end
+_writer[4] = function(msg) return _writer.string end
 _writer[5] = function(msg) return _writer.string end
 _writer[6] = function(msg)
 	local message = _writer.message
@@ -362,7 +345,7 @@ _writer[11] = function(msg) return _writer.uint52 end
 _writer[128+1] = function(msg) return _writer.int_repeated end
 _writer[128+2] = function(msg) return _writer.real_repeated end
 _writer[128+3] = function(msg) return _writer.bool_repeated end
-_writer[128+4] = function(msg) return _writer.int_repeated end
+_writer[128+4] = function(msg) return _writer.string_repeated end
 _writer[128+5] = function(msg) return _writer.string_repeated end
 _writer[128+6] = function(msg)
 	local message = _writer.message_repeated
@@ -504,12 +487,12 @@ local function default_table(typename)
 	end
 
 	local default_inst = assert(decode_message(typename , ""))
-	v = {
+	v = { 
 		__index = function(tb, key)
 			local ret = default_inst[key]
 			if 'table' ~= type(ret) then
 				return ret
-			end
+			end 
 			ret = setmetatable({}, { __index = ret })
 			rawset(tb, key, ret)
 			return ret

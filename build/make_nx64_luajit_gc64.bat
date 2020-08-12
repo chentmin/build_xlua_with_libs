@@ -27,7 +27,7 @@ set "NINTENDO_SDK_ROOT_CMAKE=%NINTENDO_SDK_ROOT:\=/%"
 cmake -DCMAKE_C_COMPILER="%NINTENDO_SDK_ROOT_CMAKE%/Compilers/NX/nx/aarch64/bin/clang.exe" ^
 	-DCMAKE_CXX_COMPILER="%NINTENDO_SDK_ROOT_CMAKE%/Compilers/NX/nx/aarch64/bin/clang++.exe" ^
 	-G "Unix Makefiles" -DCMAKE_SYSTEM_NAME=Switch ^
-	-DUSING_LUAJIT=ON -DPBC=ON ^
+	-DUSING_LUAJIT=ON ^
 	..
 popd
 cmake --build buildnx64 --config Release
