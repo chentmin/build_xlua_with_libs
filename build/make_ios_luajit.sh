@@ -49,7 +49,7 @@ fi
 cd ../..
 
 mkdir -p build_lj_ios && cd build_lj_ios
-cmake -DUSING_LUAJIT=ON  -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64  -GXcode ../
+cmake -DUSING_LUAJIT=ON -DLUAC_COMPATIBLE_FORMAT=ON -DPBC=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64  -GXcode ../
 cd ..
 cmake --build build_lj_ios --config Release
 
