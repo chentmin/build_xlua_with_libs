@@ -1,3 +1,6 @@
 [submodule "build/lua-protobuf"]
 	path = build/lua-protobuf
 	url = https://github.com/starwing/lua-protobuf
+[submodule "build/luajit-master"]
+	path = build/luajit-master
+	url = https://github.com/LuaJIT/LuaJIT.git
