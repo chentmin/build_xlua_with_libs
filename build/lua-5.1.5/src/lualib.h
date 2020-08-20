@@ -14,6 +14,8 @@
 /* Key to file-handle type */
 #define LUA_FILEHANDLE		"FILE*"
 
+#define LUA_BITLIBNAME "bit"
+LUALIB_API int luaopen_bit(lua_State *L);
 
 #define LUA_COLIBNAME	"coroutine"
 LUALIB_API int (luaopen_base) (lua_State *L);
